@@ -136,7 +136,8 @@ const watchHandler = async function (type: 'changed' | 'removed' | 'add', file: 
       const tmp = file.replace('src/', 'dist/').replace(extname, `.${platformHit.css}`)
       del([tmp])
     } else {
-      await sassCompile()
+      // @ts-ignore
+      await promisify(sassCompile()) 
     }
   }
   // 图片文件
@@ -207,7 +208,7 @@ if (isWatch) {
   buildTasks.push(watch)
 }
 // 注册默认任务
-gulp.task('default', gulp.series(buildTasks))
+gulp.task('default', gulp.series(...buildTasks))
 
 // 删除任务
 gulp.task('clean', gulp.parallel(cleanTmp, cleanDist))
